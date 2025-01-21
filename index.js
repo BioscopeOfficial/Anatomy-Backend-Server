@@ -82,7 +82,7 @@ passport.use(
               <h1 style="color: #333; text-align: center;">Welcome to Bioscope!</h1>
               <p style="color: #555; font-size: 16px; line-height: 1.5;">
                 Dear ${profile.displayName},<br/>
-                Welcome to Anatomy! We're excited to have you on board. Below are your login details:
+                Welcome to Bioscope! We're excited to have you on board. Below are your login details:
               </p>
               <ul style="color: #555; font-size: 16px;">
                 <li><strong>Email:</strong> ${profile.emails[0].value}</li>
@@ -95,7 +95,7 @@ passport.use(
                 Please use these credentials to log in and update your password if needed.
               </p>
               <div style="text-align: center; margin-top: 20px;">
-                <a href="https://anatomy-two.vercel.app" style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-size: 16px;">Visit Anatomy</a>
+                <a href="https://anatomy-fawn.vercel.app" style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-size: 16px;">Visit Anatomy</a>
               </div>
               <footer style="background-color: #333; color: white; padding: 10px; text-align: center; margin-top: 20px;">
                 <p style="font-size: 14px;">&copy; 2024 Anatomy. All Rights Reserved.</p>
@@ -415,9 +415,9 @@ transporter.verify((error, success) => {
           <div style="text-align: center; margin-bottom: 20px;">
             <img src="cid:appLogo" alt="Anatomy Logo" style="max-width: 150px;" />
           </div>
-          <h1 style="color: #333; text-align: center;">Anatomy Server Started Successfully!</h1>
+          <h1 style="color: #333; text-align: center;">Bioscope Server Started Successfully!</h1>
           <p style="color: #555; font-size: 16px; line-height: 1.5;">
-            Great news! Your Anatomy server has started successfully and is ready to serve your users.
+            Great news! Your Bioscope server has started successfully and is ready to serve your users.
           </p>
           <p style="color: #555; font-size: 16px; line-height: 1.5;">
             Server Details:
@@ -643,7 +643,7 @@ app.get("/", (req, res) => {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Anatomy Server</title>
+      <title>Bioscope Server</title>
       <link rel="icon" href="assets/images/logo.png">
       <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
       <style>
@@ -994,7 +994,7 @@ app.post('/check-email', async (req, res) => {
             <img src="cid:appLogo" alt="Company Logo" style="max-width: 150px;" />
           </div>
           <!-- Header -->
-          <h1 style="color: #333; text-align: center;">Anatomy Reset Your Password</h1>
+          <h1 style="color: #333; text-align: center;">Bioscope Reset Your Password</h1>
           <p style="font-size: 16px; color: #555; text-align: center; margin-top: 10px;">
             Hello <strong>${user.name || 'User'}</strong>,
           </p>
@@ -1086,7 +1086,7 @@ app.get('/update-password', (req, res) => {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Anatomy Password Reset</title>
+      <title>BioScope Password Reset</title>
       <link rel="icon" href="assets/images/logo.png">
       <style>
         /* General Reset */
@@ -1221,7 +1221,7 @@ app.get('/update-password', (req, res) => {
     <body>
       <div class="container">
         <div class="logo"></div>
-        <h1>Anatomy Password Reset</h1>
+        <h1>Bioscope Password Reset</h1>
         <div id="alert" class="alert"></div>
         <form action="/update-password" method="POST" onsubmit="return validateForm()">
           <div class="form-group">
