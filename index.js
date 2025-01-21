@@ -875,7 +875,7 @@ app.get("/", (req, res) => {
         <div class="team-section">
           <div class="team-member">
             <img src="https://png.pngtree.com/png-clipart/20190520/original/pngtree-vector-users-icon-png-image_4144740.jpg" alt="Team Member 1">
-            <h4>Muhammad Ahsan</h4>
+            <h4>Muhammad Yaseen</h4>
             <p>Backend Developer</p>
           </div>
           <div class="team-member">
