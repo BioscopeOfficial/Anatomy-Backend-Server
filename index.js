@@ -880,13 +880,13 @@ app.get("/", (req, res) => {
           </div>
           <div class="team-member">
             <img src="https://png.pngtree.com/png-clipart/20190520/original/pngtree-vector-users-icon-png-image_4144740.jpg" alt="Team Member 2">
-            <h4>Huzaifa</h4>
-            <p>UI/UX Designer</p>
+            <h4>Muhammad Shahbaz</h4>
+            <p>UI/UX Designer/Fronthand</p>
           </div>
           <div class="team-member">
             <img src="https://png.pngtree.com/png-clipart/20190520/original/pngtree-vector-users-icon-png-image_4144740.jpg" alt="Team Member 3">
-            <h4>Ahmed</h4>
-            <p>Project Manager</p>
+            <h4>MUrtaza/Haider</h4>
+            <p>3d Models/Machine Learning</p>
           </div>
         </div>
         <footer>
