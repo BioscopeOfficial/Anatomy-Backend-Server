@@ -79,7 +79,7 @@ passport.use(
               <div style="text-align: center; margin-bottom: 20px;">
                 <img src="cid:appLogo" alt="Anatomy Logo" style="max-width: 150px;" />
               </div>
-              <h1 style="color: #333; text-align: center;">Welcome to Anatomy!</h1>
+              <h1 style="color: #333; text-align: center;">Welcome to Bioscope!</h1>
               <p style="color: #555; font-size: 16px; line-height: 1.5;">
                 Dear ${profile.displayName},<br/>
                 Welcome to Anatomy! We're excited to have you on board. Below are your login details:
