@@ -995,26 +995,54 @@ app.post("/save-basic-quiz", async (req, res) => {
 
 
 // API Endpoint to get user quiz scores
+// app.post('/fetchquizscores', async (req, res) => {
+//   const { email } = req.body;
+//   try {
+//     const quizData = await Quiz.findOne({ email });
+//     if (!quizData) {
+//       // Default values for non-existent users
+//       return res.json({
+//         BasicQuizMarks: 0, // Default to 0 for BasicQuiz
+//         AdvanceQuizMarks: '--', // Default to "--" for AdvanceQuiz
+//       });
+//     }
+//     res.json({
+//       BasicQuizMarks: quizData.BasicQuizMarks !== null ? quizData.BasicQuizMarks : 0, // Default to 0 if null
+//       AdvanceQuizMarks: quizData.AdvanceQuizMarks !== null ? quizData.AdvanceQuizMarks : '--', // Default to "--" if null
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// });
 app.post('/fetchquizscores', async (req, res) => {
   const { email } = req.body;
+
   try {
-    const quizData = await Quiz.findOne({ email });
-    if (!quizData) {
-      // Default values for non-existent users
+    const quizData = await Quiz.find({ email });
+
+    if (!quizData || quizData.length === 0) {
       return res.json({
-        BasicQuizMarks: 0, // Default to 0 for BasicQuiz
-        AdvanceQuizMarks: '--', // Default to "--" for AdvanceQuiz
+        BasicQuizMarks: 0, // Default to 0 if no data
+        AdvanceQuizMarks: '--', // Default to "--" if no data
       });
     }
+
+    // Get the highest BasicQuizMarks and AdvanceQuizMarks
+    const highestBasicQuizMarks = Math.max(...quizData.map(q => q.BasicQuizMarks || 0));
+    const highestAdvanceQuizMarks = Math.max(...quizData.map(q => q.AdvanceQuizMarks || 0));
+
     res.json({
-      BasicQuizMarks: quizData.BasicQuizMarks !== null ? quizData.BasicQuizMarks : 0, // Default to 0 if null
-      AdvanceQuizMarks: quizData.AdvanceQuizMarks !== null ? quizData.AdvanceQuizMarks : '--', // Default to "--" if null
+      BasicQuizMarks: highestBasicQuizMarks,
+      AdvanceQuizMarks: highestAdvanceQuizMarks > 0 ? highestAdvanceQuizMarks : '--',
     });
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching quiz scores:", error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
+
 
 // API endpoint to check email and send a styled email
 app.post('/check-email', async (req, res) => {
