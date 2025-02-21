@@ -1441,6 +1441,38 @@ app.post("/save-advance-quiz", async (req, res) => {
   }
 });
 
+// Add quiz-history API for fetching quiz history of user
+app.post("/quiz-history", async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    // Fetch all quiz records for the user
+    const quizHistory = await Quiz.find({ email });
+
+    if (!quizHistory || quizHistory.length === 0) {
+      return res.json({ message: "No quiz history found for this user.", history: [] });
+    }
+
+    // Format response with quiz details
+    const formattedHistory = quizHistory.map((quiz, index) => ({
+      attempt: index + 1,
+      BasicQuiz: quiz.BasicQuiz || false,
+      BasicQuizMarks: quiz.BasicQuizMarks !== null ? quiz.BasicQuizMarks : 0,
+      AdvanceQuiz: quiz.AdvanceQuiz || false,
+      AdvanceQuizMarks: quiz.AdvanceQuizMarks !== null ? quiz.AdvanceQuizMarks : "--",
+      date: quiz.createdAt || "Unknown", // Assuming your model has a timestamp
+    }));
+
+    res.json({
+      message: "Quiz history fetched successfully!",
+      history: formattedHistory,
+    });
+  } catch (error) {
+    console.error("Error fetching quiz history:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 
 
 // Start the server
