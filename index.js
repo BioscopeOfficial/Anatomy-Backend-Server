@@ -959,16 +959,22 @@ app.post("/save-basic-quiz", async (req, res) => {
       await newQuizEntry.save();
       return res.status(200).json({ message: "New quiz entry added successfully!" });
     } else if (quizEntries.length === 3) {
-      // Exactly 3 entries: Find the one with the lowest score and update it
+      // Find the entry with the lowest score OR same score
       let lowestEntry = quizEntries.reduce((min, entry) =>
         entry.BasicQuizMarks < min.BasicQuizMarks ? entry : min
       );
 
       if (lowestEntry.BasicQuizMarks < score) {
+        // Update the lowest score
         lowestEntry.BasicQuizMarks = score;
         lowestEntry.date = new Date().toISOString().split('T')[0]; // Update with only date
         await lowestEntry.save();
         return res.status(200).json({ message: "Lowest score updated successfully!" });
+      } else if (lowestEntry.BasicQuizMarks === score) {
+        // If the score is the same, update only the date
+        lowestEntry.date = new Date().toISOString().split('T')[0];
+        await lowestEntry.save();
+        return res.status(200).json({ message: "Date updated for the same score!" });
       } else {
         return res.status(400).json({ message: "Score is not higher than the lowest existing score. No update performed." });
       }
@@ -981,6 +987,7 @@ app.post("/save-basic-quiz", async (req, res) => {
     res.status(500).json({ message: "Error saving quiz data" });
   }
 });
+
 
 
 
