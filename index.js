@@ -908,7 +908,7 @@ const quizSchema = new mongoose.Schema({
   AdvanceQuiz: { type: Boolean, default: null },
   BasicQuizMarks: { type: Number, default: null },
   AdvanceQuizMarks: { type: Number, default: null },
-  date: { type: Date, default: Date.now }, // New date field
+  date: { type: String, default: new Date().toISOString().split('T')[0] }, // Store only the date (YYYY-MM-DD)
 });
 
 const Quiz = mongoose.model("Quiz", quizSchema);
@@ -954,7 +954,7 @@ app.post("/save-basic-quiz", async (req, res) => {
         email,
         BasicQuiz: true,
         BasicQuizMarks: score,
-        date: new Date(), // Store current date
+        date: new Date().toISOString().split('T')[0], // Store only the date (YYYY-MM-DD)
       });
       await newQuizEntry.save();
       return res.status(200).json({ message: "New quiz entry added successfully!" });
@@ -966,7 +966,7 @@ app.post("/save-basic-quiz", async (req, res) => {
 
       if (lowestEntry.BasicQuizMarks < score) {
         lowestEntry.BasicQuizMarks = score;
-        lowestEntry.date = new Date(); // Update date on modification
+        lowestEntry.date = new Date().toISOString().split('T')[0]; // Update with only date
         await lowestEntry.save();
         return res.status(200).json({ message: "Lowest score updated successfully!" });
       } else {
@@ -981,6 +981,7 @@ app.post("/save-basic-quiz", async (req, res) => {
     res.status(500).json({ message: "Error saving quiz data" });
   }
 });
+
 
 
 // API Endpoint to get user quiz scores
