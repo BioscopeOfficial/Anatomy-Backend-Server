@@ -26,7 +26,6 @@ app.use(cors());
 app.use(bodyParser.json());
 
 
-
 passport.use(
   new GoogleStrategy(
     {
@@ -151,7 +150,6 @@ passport.use(
   )
 );
 
-
 app.post('/verify-otp', async (req, res) => {
   const { email, otp } = req.body;
 
@@ -179,12 +177,6 @@ app.post('/verify-otp', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
-
-
-
-
-
-
 
 // Passport session management
 passport.serializeUser((user, done) => done(null, user));
@@ -375,11 +367,6 @@ app.get("/login-success", (req, res) => {
     </html>
   `);
 });
-
-
-
-
-
 
 
 app.get("/auth/callback", passport.authenticate("google", { failureRedirect: "/" }), (req, res) => {
@@ -953,6 +940,7 @@ const Quiz = mongoose.model("Quiz", quizSchema);
 //   }
 // });
 
+// Route to save basic-quiz data
 app.post("/save-basic-quiz", async (req, res) => {
   const { email, score } = req.body;
 
@@ -991,9 +979,6 @@ app.post("/save-basic-quiz", async (req, res) => {
   }
 });
 
-
-
-
 // API Endpoint to get user quiz scores
 // app.post('/fetchquizscores', async (req, res) => {
 //   const { email } = req.body;
@@ -1015,6 +1000,8 @@ app.post("/save-basic-quiz", async (req, res) => {
 //     res.status(500).json({ message: 'Internal server error' });
 //   }
 // });
+
+// API Endpoint to get user quiz scores
 app.post('/fetchquizscores', async (req, res) => {
   const { email } = req.body;
 
@@ -1041,8 +1028,6 @@ app.post('/fetchquizscores', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
-
-
 
 // API endpoint to check email and send a styled email
 app.post('/check-email', async (req, res) => {
@@ -1145,7 +1130,6 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
-
 
 // Render Update Password Page
 app.get('/update-password', (req, res) => {
@@ -1344,8 +1328,6 @@ app.get('/update-password', (req, res) => {
   `);
 });
 
-
-
 // Handle Password Update
 app.post('/update-password', async (req, res) => {
   const { email, password } = req.body;
@@ -1375,7 +1357,6 @@ app.post('/update-password', async (req, res) => {
     res.status(500).send('<script>alert("An error occurred. Please try again later."); window.location.href="/update-password";</script>');
   }
 });
-
 
 // Endpoint to fetch user data
 app.get("/user", async (req, res) => {
@@ -1420,6 +1401,8 @@ app.get("/user", async (req, res) => {
 //     res.status(500).json({ message: "Error saving quiz data" });
 //   }
 // });
+
+// Route to save advance-quiz data
 app.post("/save-advance-quiz", async (req, res) => {
   const { email, score } = req.body;
 
