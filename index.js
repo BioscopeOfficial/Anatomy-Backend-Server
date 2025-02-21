@@ -1459,7 +1459,7 @@ app.get("/quiz-history", async (req, res) => {
         BasicQuiz: quiz.BasicQuiz || false,
         BasicQuizMarks: quiz.BasicQuizMarks ?? 0,
         AdvanceQuiz: quiz.AdvanceQuiz || false,
-        AdvanceQuizMarks: quiz.AdvanceQuizMarks ?? "--",
+        AdvanceQuizMarks: quiz.AdvanceQuizMarks ?? "Not Atempt Yet",
         date: quiz.createdAt || "Unknown",
       })),
     });
