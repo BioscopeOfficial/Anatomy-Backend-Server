@@ -1394,32 +1394,71 @@ app.get("/user", async (req, res) => {
 });
 
 // Route to save quiz data
+// app.post("/save-advance-quiz", async (req, res) => {
+//   const { email, score } = req.body;
+
+//   try {
+//     let quizEntry = await Quiz.findOne({ email });
+
+//     if (quizEntry) {
+//       // Update existing entry
+//       quizEntry.AdvanceQuiz = true;
+//       quizEntry.AdvanceQuizMarks = score;
+//     } else {
+//       // Create new entry
+//       quizEntry = new Quiz({
+//         email,
+//         AdvanceQuiz: true,
+//         AdvanceQuizMarks: score,
+//       });
+//     }
+
+//     await quizEntry.save();
+//     res.status(200).json({ message: "Quiz data saved successfully!" });
+//   } catch (error) {
+//     console.error("Error saving quiz data:", error);
+//     res.status(500).json({ message: "Error saving quiz data" });
+//   }
+// });
 app.post("/save-advance-quiz", async (req, res) => {
   const { email, score } = req.body;
 
   try {
-    let quizEntry = await Quiz.findOne({ email });
+    let quizEntries = await Quiz.find({ email });
 
-    if (quizEntry) {
-      // Update existing entry
-      quizEntry.AdvanceQuiz = true;
-      quizEntry.AdvanceQuizMarks = score;
-    } else {
-      // Create new entry
-      quizEntry = new Quiz({
+    if (quizEntries.length < 3) {
+      // Less than 3 entries: Add a new one
+      const newQuizEntry = new Quiz({
         email,
         AdvanceQuiz: true,
         AdvanceQuizMarks: score,
       });
-    }
+      await newQuizEntry.save();
+      return res.status(200).json({ message: "New quiz entry added successfully!" });
+    } else if (quizEntries.length === 3) {
+      // Exactly 3 entries: Find the one with the lowest score and update it
+      let lowestEntry = quizEntries.reduce((min, entry) =>
+        entry.AdvanceQuizMarks < min.AdvanceQuizMarks ? entry : min
+      );
 
-    await quizEntry.save();
-    res.status(200).json({ message: "Quiz data saved successfully!" });
+      if (lowestEntry.AdvanceQuizMarks < score) {
+        lowestEntry.AdvanceQuizMarks = score;
+        await lowestEntry.save();
+        return res.status(200).json({ message: "Lowest score updated successfully!" });
+      } else {
+        return res.status(400).json({ message: "Score is not higher than the lowest existing score. No update performed." });
+      }
+    } else {
+      // More than 3 entries: Do not allow updates
+      return res.status(400).json({ message: "Maximum quiz entries reached. No update allowed." });
+    }
   } catch (error) {
     console.error("Error saving quiz data:", error);
     res.status(500).json({ message: "Error saving quiz data" });
   }
 });
+
+
 
 // Start the server
 app.listen(PORT, () => {
