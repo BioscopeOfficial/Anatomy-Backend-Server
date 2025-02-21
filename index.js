@@ -945,7 +945,7 @@ app.post("/save-basic-quiz", async (req, res) => {
   const { email, score } = req.body;
 
   try {
-    let quizEntries = await Quiz.find({ email }).sort({ date: 1 }); // Sort by date (oldest first)
+    let quizEntries = await Quiz.find({ email });
 
     if (quizEntries.length < 3) {
       // Less than 3 entries: Add a new one
@@ -953,23 +953,27 @@ app.post("/save-basic-quiz", async (req, res) => {
         email,
         BasicQuiz: true,
         BasicQuizMarks: score,
-        date: new Date(), // Store current date
+        date: new Date() // Store current timestamp
       });
       await newQuizEntry.save();
       return res.status(200).json({ message: "New quiz entry added successfully!" });
+    } else if (quizEntries.length === 3) {
+      // Exactly 3 entries: Find the one with the lowest score and update it
+      let lowestEntry = quizEntries.reduce((min, entry) =>
+        entry.BasicQuizMarks < min.BasicQuizMarks ? entry : min
+      );
+
+      if (lowestEntry.BasicQuizMarks < score) {
+        lowestEntry.BasicQuizMarks = score;
+        lowestEntry.date = new Date(); // Update timestamp on modification
+        await lowestEntry.save();
+        return res.status(200).json({ message: "Lowest score updated successfully!" });
+      } else {
+        return res.status(400).json({ message: "Score is not higher than the lowest existing score. No update performed." });
+      }
     } else {
-      // More than 3 entries: Remove the oldest entry and add a new one
-      await Quiz.findByIdAndDelete(quizEntries[0]._id); // Delete the oldest entry
-
-      const newQuizEntry = new Quiz({
-        email,
-        BasicQuiz: true,
-        BasicQuizMarks: score,
-        date: new Date(), // Store current date
-      });
-      await newQuizEntry.save();
-
-      return res.status(200).json({ message: "Oldest quiz entry replaced with the new one!" });
+      // More than 3 entries: Do not allow updates
+      return res.status(400).json({ message: "Maximum quiz entries reached. No update allowed." });
     }
   } catch (error) {
     console.error("Error saving quiz data:", error);
