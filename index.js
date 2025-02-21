@@ -1481,7 +1481,77 @@ app.get("/quiz-history", async (req, res) => {
   }
 });
 
+app.get("/download-quiz-history", async (req, res) => {
+  const { email } = req.query;
 
+  try {
+    const quizHistory = await Quiz.find({ email });
+
+    if (!quizHistory || quizHistory.length === 0) {
+      return res.send("<h2>No quiz history found for this user.</h2>");
+    }
+
+    // Generate HTML for the PDF
+    let html = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Quiz History</title>
+        <style>
+          body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+          .container { max-width: 800px; margin: auto; }
+          h1 { color: #333; }
+          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+          th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+          th { background-color: #f4a261; color: white; }
+          .logo { width: 150px; height: 150px; border-radius: 50%; margin: 20px auto; }
+          .download-btn { padding: 10px 20px; background: #f4a261; color: white; border: none; cursor: pointer; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <img src="https://your-server.com/static/logo.png" class="logo" alt="Bioscope Logo">
+          <h1>📜 Bioscope - Quiz History</h1>
+          <p>🌐 <a href="https://anatomy-fawn.vercel.app/" target="_blank">Visit Our Website</a></p>
+          <p>📧 User Email: ${email}</p>
+
+          <table>
+            <tr>
+              <th>📌 Attempt</th>
+              <th>📝 Basic Quiz</th>
+              <th>🎯 Marks</th>
+              <th>🚀 Advanced</th>
+              <th>🌟 Marks</th>
+              <th>📅 Date</th>
+            </tr>`;
+
+    quizHistory.forEach((quiz, index) => {
+      html += `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${quiz.BasicQuiz ? "✅ Yes" : "🔒 Locked"}</td>
+          <td>${quiz.BasicQuizMarks}</td>
+          <td>${quiz.AdvanceQuiz ? "✅ Yes" : "🔒 Locked"}</td>
+          <td>${quiz.AdvanceQuizMarks}</td>
+          <td>${quiz.date}</td>
+        </tr>`;
+    });
+
+    html += `
+          </table>
+          <button class="download-btn" onclick="window.print()">📄 Download PDF</button>
+        </div>
+      </body>
+      </html>`;
+
+    res.send(html);
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+    res.status(500).json({ message: "Internal server error", error: error.toString() });
+  }
+});
 
 
 // Start the server
