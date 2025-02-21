@@ -1583,9 +1583,9 @@ app.get("/download-quiz-history", async (req, res) => {
               <tr>
                 <th>📌 S.no</th>
                 <th>📝 Basic Quiz</th>
-                <th>🎯 Marks</th>
+                <th>🎯 Basic Marks</th>
                 <th>🚀 Advanced</th>
-                <th>🌟 Marks</th>
+                <th>🌟 Advance Marks</th>
                 <th>📅 Date</th>
               </tr>
             </thead>
