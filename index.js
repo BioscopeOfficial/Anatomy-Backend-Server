@@ -1493,22 +1493,33 @@ app.get("/quiz-history", async (req, res) => {
       return res.json({ message: "No quiz history found for this user.", history: [] });
     }
 
+    // Sort by highest total score (BasicQuizMarks + AdvanceQuizMarks) and latest date
+    const sortedHistory = quizHistory.sort((a, b) => {
+      const scoreA = (a.BasicQuizMarks ?? 0) + (a.AdvanceQuizMarks === "Not Atempt Yet" ? 0 : a.AdvanceQuizMarks);
+      const scoreB = (b.BasicQuizMarks ?? 0) + (b.AdvanceQuizMarks === "Not Atempt Yet" ? 0 : b.AdvanceQuizMarks);
+      return scoreB - scoreA || new Date(b.date) - new Date(a.date);
+    });
+
+    // Get top 3 quizzes
+    const topThreeQuizzes = sortedHistory.slice(0, 3).map((quiz, index) => ({
+      attempt: index + 1,
+      BasicQuiz: quiz.BasicQuiz || false,
+      BasicQuizMarks: quiz.BasicQuizMarks ?? 0,
+      AdvanceQuiz: quiz.AdvanceQuiz || false,
+      AdvanceQuizMarks: quiz.AdvanceQuizMarks ?? "Not Atempt Yet",
+      date: quiz.date || "Unknown",
+    }));
+
     res.json({
-      message: "Quiz history fetched successfully!",
-      history: quizHistory.map((quiz, index) => ({
-        attempt: index + 1,
-        BasicQuiz: quiz.BasicQuiz || false,
-        BasicQuizMarks: quiz.BasicQuizMarks ?? 0,
-        AdvanceQuiz: quiz.AdvanceQuiz || false,
-        AdvanceQuizMarks: quiz.AdvanceQuizMarks ?? "Not Atempt Yet",
-        date: quiz.date || "Unknown",
-      })),
+      message: "Top 3 quiz history fetched successfully!",
+      history: topThreeQuizzes,
     });
   } catch (error) {
     console.error("Error fetching quiz history:", error);
     res.status(500).json({ message: "Internal server error", error: error.toString() });
   }
 });
+
 
 
 app.get("/download-quiz-history", async (req, res) => {
