@@ -11,6 +11,9 @@ const nodemailer = require("nodemailer");
 const path = require("path");
 const { Strategy: GoogleStrategy } = require("passport-google-oauth2");
 const crypto = require("crypto"); // Add at the top to import crypto
+const pdfkit = require("pdfkit");
+const fs = require("fs");
+const path = require("path");
 
 // Initialize Express app
 const app = express();
