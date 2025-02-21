@@ -908,12 +908,10 @@ const quizSchema = new mongoose.Schema({
   AdvanceQuiz: { type: Boolean, default: null },
   BasicQuizMarks: { type: Number, default: null },
   AdvanceQuizMarks: { type: Number, default: null },
-  date: { 
-    type: Date, 
-    default: () => new Date().setHours(0, 0, 0, 0) // Store only date (remove time)
-  },
+  date: { type: Date, default: Date.now }, // New date field
 });
 
+const Quiz = mongoose.model("Quiz", quizSchema);
 
 // Route to save quiz data
 // app.post("/save-basic-quiz", async (req, res) => {
@@ -956,7 +954,7 @@ app.post("/save-basic-quiz", async (req, res) => {
         email,
         BasicQuiz: true,
         BasicQuizMarks: score,
-        date: new Date().setHours(0, 0, 0, 0)
+        date: new Date(), // Store current date
       });
       await newQuizEntry.save();
       return res.status(200).json({ message: "New quiz entry added successfully!" });
@@ -968,7 +966,7 @@ app.post("/save-basic-quiz", async (req, res) => {
 
       if (lowestEntry.BasicQuizMarks < score) {
         lowestEntry.BasicQuizMarks = score;
-        lowestEntry.date = new Date().setHours(0, 0, 0, 0); // Update date on modification
+        lowestEntry.date = new Date(); // Update date on modification
         await lowestEntry.save();
         return res.status(200).json({ message: "Lowest score updated successfully!" });
       } else {
