@@ -943,7 +943,7 @@ app.post("/save-basic-quiz", async (req, res) => {
   try {
     let quizEntries = await Quiz.find({ email });
 
-    if (quizEntries.length < 3) {
+    if (quizEntries.length < 30) {
       // Less than 3 entries: Add a new one
       const newQuizEntry = new Quiz({
         email,
@@ -953,7 +953,7 @@ app.post("/save-basic-quiz", async (req, res) => {
       });
       await newQuizEntry.save();
       return res.status(200).json({ message: "New quiz entry added successfully!" });
-    } else if (quizEntries.length === 3) {
+    } else if (quizEntries.length === 30) {
       // Find the entry with the lowest score OR same score
       let lowestEntry = quizEntries.reduce((min, entry) =>
         entry.BasicQuizMarks < min.BasicQuizMarks ? entry : min
@@ -1413,7 +1413,7 @@ app.post("/save-advance-quiz", async (req, res) => {
   try {
     let quizEntries = await Quiz.find({ email });
 
-    if (quizEntries.length < 3) {
+    if (quizEntries.length < 30) {
       // Less than 3 entries: Add a new one
       const newQuizEntry = new Quiz({
         email,
@@ -1423,7 +1423,7 @@ app.post("/save-advance-quiz", async (req, res) => {
       });
       await newQuizEntry.save();
       return res.status(200).json({ message: "New quiz entry added successfully!" });
-    } else if (quizEntries.length === 3) {
+    } else if (quizEntries.length === 30) {
       // Find the entry with the lowest score OR same score
       let lowestEntry = quizEntries.reduce((min, entry) =>
         entry.AdvanceQuizMarks < min.AdvanceQuizMarks ? entry : min
@@ -1454,6 +1454,35 @@ app.post("/save-advance-quiz", async (req, res) => {
 });
 
 // Add quiz-history API for fetching quiz history of user
+// app.get("/quiz-history", async (req, res) => {
+//   const { email } = req.query;
+
+//   try {
+//     const quizHistory = await Quiz.find({ email });
+
+//     if (!quizHistory || quizHistory.length === 0) {
+//       return res.json({ message: "No quiz history found for this user.", history: [] });
+//     }
+
+//     res.json({
+//       message: "Quiz history fetched successfully!",
+//       history: quizHistory.map((quiz, index) => ({
+//         attempt: index + 1,
+//         BasicQuiz: quiz.BasicQuiz || false,
+//         BasicQuizMarks: quiz.BasicQuizMarks ?? 0,
+//         AdvanceQuiz: quiz.AdvanceQuiz || false,
+//         AdvanceQuizMarks: quiz.AdvanceQuizMarks ?? "Not Atempt Yet",
+//         date: quiz.date || "Unknown",
+//       })),
+//     });
+//   } catch (error) {
+//     console.error("Error fetching quiz history:", error);
+//     res.status(500).json({ message: "Internal server error", error: error.toString() });
+//   }
+// });
+
+
+// Add quiz-history API for fetching quiz history of user
 app.get("/quiz-history", async (req, res) => {
   const { email } = req.query;
 
@@ -1481,6 +1510,7 @@ app.get("/quiz-history", async (req, res) => {
   }
 });
 
+
 app.get("/download-quiz-history", async (req, res) => {
   const { email } = req.query;
 
@@ -1498,7 +1528,8 @@ app.get("/download-quiz-history", async (req, res) => {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Quiz History</title>
+        <title>Bioscope Quiz Report</title>
+        <link rel="icon" href="assets/images/logo.png">
         <style>
           body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
           .container { max-width: 800px; margin: auto; }
@@ -1512,14 +1543,14 @@ app.get("/download-quiz-history", async (req, res) => {
       </head>
       <body>
         <div class="container">
-          <img src="https://your-server.com/static/logo.png" class="logo" alt="Bioscope Logo">
+          <img src="assets/images/logo.png" class="logo" alt="Bioscope Logo">
           <h1>📜 Bioscope - Quiz History</h1>
-          <p>🌐 <a href="https://anatomy-fawn.vercel.app/" target="_blank">Visit Our Website</a></p>
+          <p>🌐 <a href="https://www.anatomy.com/" target="_blank">Visit Our Website</a></p>
           <p>📧 User Email: ${email}</p>
 
           <table>
             <tr>
-              <th>📌 Attempt</th>
+              <th>📌 S.no</th>
               <th>📝 Basic Quiz</th>
               <th>🎯 Marks</th>
               <th>🚀 Advanced</th>
@@ -1531,9 +1562,9 @@ app.get("/download-quiz-history", async (req, res) => {
       html += `
         <tr>
           <td>${index + 1}</td>
-          <td>${quiz.BasicQuiz ? "✅ Yes" : "🔒 Locked"}</td>
+          <td>${quiz.BasicQuiz ? "✅ Attempt" : "🔒 Locked"}</td>
           <td>${quiz.BasicQuizMarks}</td>
-          <td>${quiz.AdvanceQuiz ? "✅ Yes" : "🔒 Locked"}</td>
+          <td>${quiz.AdvanceQuiz ? "✅ Attempt" : "🔒 Locked"}</td>
           <td>${quiz.AdvanceQuizMarks}</td>
           <td>${quiz.date}</td>
         </tr>`;
