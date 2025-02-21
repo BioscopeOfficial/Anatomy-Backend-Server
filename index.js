@@ -1464,7 +1464,7 @@ app.get("/quiz-history", async (req, res) => {
         BasicQuizMarks: quiz.BasicQuizMarks ?? 0,
         AdvanceQuiz: quiz.AdvanceQuiz || false,
         AdvanceQuizMarks: quiz.AdvanceQuizMarks ?? "Not Atempt Yet",
-        date: quiz.createdAt || "Unknown",
+        date: quiz.date || "Unknown",
       })),
     });
   } catch (error) {
