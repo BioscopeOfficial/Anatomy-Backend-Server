@@ -11,9 +11,6 @@ const nodemailer = require("nodemailer");
 const path = require("path");
 const { Strategy: GoogleStrategy } = require("passport-google-oauth2");
 const crypto = require("crypto"); // Add at the top to import crypto
-const pdfkit = require("pdfkit");
-const fs = require("fs");
-const path = require("path");
 
 // Initialize Express app
 const app = express();
@@ -1484,91 +1481,7 @@ app.get("/quiz-history", async (req, res) => {
   }
 });
 
-app.get("/download-quiz-history", async (req, res) => {
-  const { email } = req.query;
 
-  try {
-    const quizHistory = await Quiz.find({ email });
-
-    if (!quizHistory || quizHistory.length === 0) {
-      return res.status(404).json({ message: "No quiz history found." });
-    }
-
-    const fileName = `quiz_history_${Date.now()}.pdf`;
-    const filePath = path.join(__dirname, fileName);
-    const doc = new pdfkit({ size: "A4", margin: 30 });
-
-    // Stream PDF to file
-    doc.pipe(fs.createWriteStream(filePath));
-
-    // App Name & Logo
-    doc.fontSize(20).text("📖 Bioscope - Quiz History", { align: "center", underline: true });
-    const logoPath = path.join(__dirname, "logo.png"); // Replace with your actual logo path
-    doc.image(logoPath, 230, 50, { width: 150, height: 150, align: "center" })
-       .rect(230, 50, 150, 150)
-       .stroke();
-
-    doc.moveDown(2);
-
-    // Server Link
-    doc.fontSize(12).fillColor("blue").text("🔗 Visit: https://anatomy-fawn.vercel.app/", {
-      align: "center",
-      link: "https://anatomy-fawn.vercel.app/"
-    });
-
-    doc.moveDown(2);
-
-    // Table Header
-    doc.fontSize(14).fillColor("black").text("📜 Quiz Attempts", { underline: true });
-    doc.moveDown();
-
-    // Draw Table
-    const headers = ["📌 Attempt", "📝 Basic Quiz", "🎯 Marks", "🚀 Advanced Quiz", "🌟 Marks", "📅 Date"];
-    const columnWidths = [60, 80, 60, 80, 60, 100];
-
-    // Draw headers
-    let y = doc.y;
-    headers.forEach((header, i) => {
-      doc.text(header, 50 + columnWidths.slice(0, i).reduce((a, b) => a + b, 0), y, { width: columnWidths[i], bold: true });
-    });
-
-    doc.moveDown();
-
-    // Draw data rows
-    quizHistory.forEach((quiz, index) => {
-      y = doc.y;
-      const rowData = [
-        index + 1,
-        quiz.BasicQuiz ? "✅ Yes" : "🔒 Locked",
-        quiz.BasicQuizMarks,
-        quiz.AdvanceQuiz ? "✅ Yes" : "🔒 Locked",
-        quiz.AdvanceQuizMarks,
-        quiz.date
-      ];
-
-      rowData.forEach((text, i) => {
-        doc.text(text.toString(), 50 + columnWidths.slice(0, i).reduce((a, b) => a + b, 0), y, { width: columnWidths[i] });
-      });
-
-      doc.moveDown();
-    });
-
-    // Finalize PDF
-    doc.end();
-
-    // Send File Response
-    doc.on("finish", () => {
-      res.download(filePath, fileName, (err) => {
-        if (err) console.error("Error sending PDF:", err);
-        fs.unlinkSync(filePath); // Delete after sending
-      });
-    });
-
-  } catch (error) {
-    console.error("Error generating PDF:", error);
-    res.status(500).json({ message: "Internal Server Error", error: error.toString() });
-  }
-});
 
 
 // Start the server
