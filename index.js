@@ -1427,21 +1427,27 @@ app.post("/save-advance-quiz", async (req, res) => {
         email,
         AdvanceQuiz: true,
         AdvanceQuizMarks: score,
-        date: new Date(), // Store current date
+        date: new Date().toISOString().split('T')[0], // Store only the date (YYYY-MM-DD)
       });
       await newQuizEntry.save();
       return res.status(200).json({ message: "New quiz entry added successfully!" });
     } else if (quizEntries.length === 3) {
-      // Exactly 3 entries: Find the one with the lowest score and update it
+      // Find the entry with the lowest score OR same score
       let lowestEntry = quizEntries.reduce((min, entry) =>
         entry.AdvanceQuizMarks < min.AdvanceQuizMarks ? entry : min
       );
 
       if (lowestEntry.AdvanceQuizMarks < score) {
+        // Update the lowest score
         lowestEntry.AdvanceQuizMarks = score;
-        lowestEntry.date = new Date(); // Update date on modification
+        lowestEntry.date = new Date().toISOString().split('T')[0]; // Update with only date
         await lowestEntry.save();
         return res.status(200).json({ message: "Lowest score updated successfully!" });
+      } else if (lowestEntry.AdvanceQuizMarks === score) {
+        // If the score is the same, update only the date
+        lowestEntry.date = new Date().toISOString().split('T')[0];
+        await lowestEntry.save();
+        return res.status(200).json({ message: "Date updated for the same score!" });
       } else {
         return res.status(400).json({ message: "Score is not higher than the lowest existing score. No update performed." });
       }
@@ -1454,6 +1460,7 @@ app.post("/save-advance-quiz", async (req, res) => {
     res.status(500).json({ message: "Error saving quiz data" });
   }
 });
+
 
 // Add quiz-history API for fetching quiz history of user
 app.get("/quiz-history", async (req, res) => {
