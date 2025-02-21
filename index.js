@@ -25,7 +25,6 @@ let loggedInUserEmail = null;
 app.use(cors());
 app.use(bodyParser.json());
 
-
 passport.use(
   new GoogleStrategy(
     {
@@ -368,7 +367,6 @@ app.get("/login-success", (req, res) => {
   `);
 });
 
-
 app.get("/auth/callback", passport.authenticate("google", { failureRedirect: "/" }), (req, res) => {
   const { token, profile } = req.user;
 
@@ -473,7 +471,6 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
-
 app.post("/verify", async (req, res) => {
   const { otp } = req.body;
 
@@ -501,7 +498,6 @@ app.post("/verify", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
 
 // Signup Route
 app.post("/signup", async (req, res) => {
@@ -550,7 +546,6 @@ app.post("/login", async (req, res) => {
     res.status(500).json({ error: `Internal server error: ${error.message}` }); // Include error message
   }
 });
-
 
 // Send Quiz Completion Email Route
 app.post("/send-quiz-completion-email", async (req, res) => {
@@ -987,9 +982,6 @@ app.post("/save-basic-quiz", async (req, res) => {
     res.status(500).json({ message: "Error saving quiz data" });
   }
 });
-
-
-
 
 // API Endpoint to get user quiz scores
 // app.post('/fetchquizscores', async (req, res) => {
@@ -1461,7 +1453,6 @@ app.post("/save-advance-quiz", async (req, res) => {
   }
 });
 
-
 // Add quiz-history API for fetching quiz history of user
 app.get("/quiz-history", async (req, res) => {
   const { email } = req.query;
@@ -1489,8 +1480,6 @@ app.get("/quiz-history", async (req, res) => {
     res.status(500).json({ message: "Internal server error", error: error.toString() });
   }
 });
-
-
 
 
 
