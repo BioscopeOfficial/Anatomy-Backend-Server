@@ -1443,7 +1443,7 @@ app.post("/save-advance-quiz", async (req, res) => {
 
 // Add quiz-history API for fetching quiz history of user
 app.get("/quiz-history", async (req, res) => {
-  const { email } = req.query; // Using req.query for GET requests
+  const { email } = req.query;
 
   try {
     const quizHistory = await Quiz.find({ email });
@@ -1452,24 +1452,23 @@ app.get("/quiz-history", async (req, res) => {
       return res.json({ message: "No quiz history found for this user.", history: [] });
     }
 
-    const formattedHistory = quizHistory.map((quiz, index) => ({
-      attempt: index + 1,
-      BasicQuiz: quiz.BasicQuiz || false,
-      BasicQuizMarks: quiz.BasicQuizMarks !== null ? quiz.BasicQuizMarks : 0,
-      AdvanceQuiz: quiz.AdvanceQuiz || false,
-      AdvanceQuizMarks: quiz.AdvanceQuizMarks !== null ? quiz.AdvanceQuizMarks : "--",
-      date: quiz.createdAt || "Unknown",
-    }));
-
     res.json({
       message: "Quiz history fetched successfully!",
-      history: formattedHistory,
+      history: quizHistory.map((quiz, index) => ({
+        attempt: index + 1,
+        BasicQuiz: quiz.BasicQuiz || false,
+        BasicQuizMarks: quiz.BasicQuizMarks ?? 0,
+        AdvanceQuiz: quiz.AdvanceQuiz || false,
+        AdvanceQuizMarks: quiz.AdvanceQuizMarks ?? "--",
+        date: quiz.createdAt || "Unknown",
+      })),
     });
   } catch (error) {
     console.error("Error fetching quiz history:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Internal server error", error: error.toString() });
   }
 });
+
 
 
 
