@@ -943,7 +943,7 @@ app.post("/save-basic-quiz", async (req, res) => {
   try {
     let quizEntries = await Quiz.find({ email });
 
-    if (quizEntries.length < 30) {
+    if (quizEntries.length < 20) {
       // Less than 3 entries: Add a new one
       const newQuizEntry = new Quiz({
         email,
@@ -1413,7 +1413,7 @@ app.post("/save-advance-quiz", async (req, res) => {
   try {
     let quizEntries = await Quiz.find({ email });
 
-    if (quizEntries.length < 30) {
+    if (quizEntries.length < 20) {
       // Less than 3 entries: Add a new one
       const newQuizEntry = new Quiz({
         email,
@@ -1503,9 +1503,9 @@ app.get("/quiz-history", async (req, res) => {
     // Get top 3 quizzes
     const topThreeQuizzes = sortedHistory.slice(0, 3).map((quiz, index) => ({
       attempt: index + 1,
-      BasicQuiz: quiz.BasicQuiz || false,
+      BasicQuiz: quiz.BasicQuiz || true,
       BasicQuizMarks: quiz.BasicQuizMarks ?? 0,
-      AdvanceQuiz: quiz.AdvanceQuiz || false,
+      AdvanceQuiz: quiz.AdvanceQuiz || true,
       AdvanceQuizMarks: quiz.AdvanceQuizMarks ?? "Not Atempt Yet",
       date: quiz.date || "Unknown",
     }));
