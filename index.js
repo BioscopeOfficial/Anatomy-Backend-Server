@@ -1505,7 +1505,7 @@ app.get("/quiz-history", async (req, res) => {
       attempt: index + 1,
       BasicQuiz: quiz.BasicQuiz || true,
       BasicQuizMarks: quiz.BasicQuizMarks ?? 0,
-      AdvanceQuiz: quiz.AdvanceQuiz || true,
+      AdvanceQuiz: quiz.AdvanceQuiz || false,
       AdvanceQuizMarks: quiz.AdvanceQuizMarks ?? "Not Atempt Yet",
       date: quiz.date || "Unknown",
     }));
