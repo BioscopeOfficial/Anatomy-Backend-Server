@@ -1411,38 +1411,32 @@ app.post("/save-advance-quiz", async (req, res) => {
   const { email, score } = req.body;
 
   try {
-    // First, check if user has completed Basic Quiz with required score
-    const userQuiz = await Quiz.findOne({ email });
-
-    if (!userQuiz || !userQuiz.BasicQuiz || userQuiz.BasicQuizMarks < 6) {
-      return res.status(403).json({
-        message: "Advance quiz is locked. Complete the Basic Quiz with at least 6 marks.",
-      });
-    }
-
-    // Fetch all advance quiz attempts
     let quizEntries = await Quiz.find({ email });
 
     if (quizEntries.length < 20) {
+      // Less than 3 entries: Add a new one
       const newQuizEntry = new Quiz({
         email,
         AdvanceQuiz: true,
         AdvanceQuizMarks: score,
-        date: new Date().toISOString().split('T')[0],
+        date: new Date().toISOString().split('T')[0], // Store only the date (YYYY-MM-DD)
       });
       await newQuizEntry.save();
       return res.status(200).json({ message: "New quiz entry added successfully!" });
     } else if (quizEntries.length === 30) {
+      // Find the entry with the lowest score OR same score
       let lowestEntry = quizEntries.reduce((min, entry) =>
         entry.AdvanceQuizMarks < min.AdvanceQuizMarks ? entry : min
       );
 
       if (lowestEntry.AdvanceQuizMarks < score) {
+        // Update the lowest score
         lowestEntry.AdvanceQuizMarks = score;
-        lowestEntry.date = new Date().toISOString().split('T')[0];
+        lowestEntry.date = new Date().toISOString().split('T')[0]; // Update with only date
         await lowestEntry.save();
         return res.status(200).json({ message: "Lowest score updated successfully!" });
       } else if (lowestEntry.AdvanceQuizMarks === score) {
+        // If the score is the same, update only the date
         lowestEntry.date = new Date().toISOString().split('T')[0];
         await lowestEntry.save();
         return res.status(200).json({ message: "Date updated for the same score!" });
@@ -1450,6 +1444,7 @@ app.post("/save-advance-quiz", async (req, res) => {
         return res.status(400).json({ message: "Score is not higher than the lowest existing score. No update performed." });
       }
     } else {
+      // More than 3 entries: Do not allow updates
       return res.status(400).json({ message: "Maximum quiz entries reached. No update allowed." });
     }
   } catch (error) {
@@ -1629,5 +1624,4 @@ app.get("/download-quiz-history", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running at http://${IP_ADDRESS}:${PORT}`);
 });
-
 
