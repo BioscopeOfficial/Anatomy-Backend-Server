@@ -512,17 +512,65 @@ app.post("/signup", async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ error: "Email already exists!" });
     }
+ const verificationCode = Math.floor(100000 + Math.random() * 900000);
+    const verificationCodeExpires = Date.now() + 15 * 60 * 1000; // 15 minutes expiry
 
+    // Create user with verification data (not verified yet)
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ name, email, password: hashedPassword });
+    const newUser = new User({ 
+      name, 
+      email, 
+      password: await bcrypt.hash(password, 10),
+      isVerified: false,
+      verificationCode,
+      verificationCodeExpires
+    });
+    // const newUser = new User({ name, email, password: hashedPassword });
     await newUser.save();
 
+
+    
     res.status(201).json({ message: "User created successfully!" });
   } catch (error) {
     console.error("Error creating user:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+app.post("/verify-signup", async (req, res) => {
+  const { email, code } = req.body;
+
+  try {
+    // Find unverified user with matching code
+    const user = await User.findOne({
+      email,
+      verificationCode: code,
+      verificationCodeExpires: { $gt: Date.now() },
+      isVerified: false
+    });
+
+    if (!user) {
+      return res.status(400).json({ error: "Invalid or expired verification code" });
+    }
+
+    // Mark user as verified
+    user.isVerified = true;
+    user.verificationCode = undefined;
+    user.verificationCodeExpires = undefined;
+    await user.save();
+
+    res.status(200).json({ 
+      message: "Email verified successfully! Account created.",
+      status: "verified"
+    });
+
+  } catch (error) {
+    console.error("Verification error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
 
 // Login Route
 app.post("/login", async (req, res) => {
@@ -1624,4 +1672,3 @@ app.get("/download-quiz-history", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running at http://${IP_ADDRESS}:${PORT}`);
 });
-
