@@ -578,6 +578,21 @@ app.post("/login", async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ error: "Invalid credentials!" });
+    }
+
+    // Check if user is verified
+    if (!user.isVerified) {
+      return res.status(403).json({ 
+        error: "Please verify your email first",
+        status: "unverified"
+      });
+    }
+
+    if (!(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ error: "Invalid credentials!" });
+    }
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ error: "Invalid credentials!" });
     }
