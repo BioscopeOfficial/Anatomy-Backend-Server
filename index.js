@@ -906,17 +906,17 @@ app.get("/", (req, res) => {
         <div class="team-section">
           <div class="team-member">
             <img src="https://png.pngtree.com/png-clipart/20190520/original/pngtree-vector-users-icon-png-image_4144740.jpg" alt="Team Member 1">
-            <h4>Muhammad Ahsan</h4>
+            <h4>Muhammad Shahbaz</h4>
             <p>Backend Developer</p>
           </div>
           <div class="team-member">
             <img src="https://png.pngtree.com/png-clipart/20190520/original/pngtree-vector-users-icon-png-image_4144740.jpg" alt="Team Member 2">
-            <h4>Huzaifa</h4>
+            <h4>Yaseen</h4>
             <p>UI/UX Designer</p>
           </div>
           <div class="team-member">
             <img src="https://png.pngtree.com/png-clipart/20190520/original/pngtree-vector-users-icon-png-image_4144740.jpg" alt="Team Member 3">
-            <h4>Ahmed</h4>
+            <h4>Murtaza/Haider</h4>
             <p>Project Manager</p>
           </div>
         </div>
