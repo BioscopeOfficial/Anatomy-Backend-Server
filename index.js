@@ -104,7 +104,7 @@ passport.use(
           attachments: [
             {
               filename: "logo.png",
-              path: 'assets/images/logo.png', // Replace with the correct logo path
+              path: 'assets/images/logoo.png', // Replace with the correct logo path
               cid: "appLogo", // Attach logo as an inline image
             },
           ],
