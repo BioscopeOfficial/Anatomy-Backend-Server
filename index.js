@@ -103,7 +103,7 @@ passport.use(
           `,
           attachments: [
             {
-              filename: "logo.png",
+              filename: "logoo.png",
               path: 'assets/images/logoo.png', // Replace with the correct logo path
               cid: "appLogo", // Attach logo as an inline image
             },
@@ -197,7 +197,7 @@ app.get("/login-success", (req, res) => {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Anatomy Login Success</title>
-        <link rel="icon" href="assets/images/logo.png">
+        <link rel="icon" href="assets/images/logoo.png">
         <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
         <style>
           @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
@@ -390,7 +390,7 @@ transporter.verify((error, success) => {
   } else {
     console.log("SMTP is connected successfully!");
     // Send an email when the server starts
-    const logoPath = path.join(__dirname, "assets/images/logo.png");
+    const logoPath = path.join(__dirname, "assets/images/logoo.png");
     const mailOptions = {
       from: process.env.SENDER_EMAIL,
       to: process.env.RECIPIENT_EMAIL,
@@ -422,7 +422,7 @@ transporter.verify((error, success) => {
       `,
       attachments: [
         {
-          filename: "logo.png",
+          filename: "logoo.png",
           path: logoPath,
           cid: "appLogo",
         },
@@ -605,7 +605,7 @@ app.post("/send-quiz-completion-email", async (req, res) => {
     return res.status(400).json({ error: "Invalid data format. Ensure email, score, and incorrectLinks are provided." });
   }
 
-  const logoPath = path.join(__dirname, "assets/images/logo.png");
+  const logoPath = path.join(__dirname, "assets/images/logoo.png");
 
   // Build the incorrect answers HTML list
   const incorrectAnswersList = incorrectLinks
@@ -675,7 +675,7 @@ app.get("/", (req, res) => {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Anatomy Server</title>
-      <link rel="icon" href="assets/images/logo.png">
+      <link rel="icon" href="assets/images/logoo.png">
       <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
       <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
@@ -1153,7 +1153,7 @@ app.post('/check-email', async (req, res) => {
         attachments: [
           {
             filename: 'logoo.png',
-            path: path.resolve(__dirname, 'assets/images/logo.png'),
+            path: path.resolve(__dirname, 'assets/images/logoo.png'),
             cid: 'appLogo', // Same as the "cid" in the <img> tag
           },
         ],
@@ -1193,7 +1193,7 @@ app.get('/update-password', (req, res) => {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Anatomy Password Reset</title>
-      <link rel="icon" href="assets/images/logo.png">
+      <link rel="icon" href="assets/images/logoo.png">
       <style>
         /* General Reset */
         * {
@@ -1236,7 +1236,7 @@ app.get('/update-password', (req, res) => {
           width: 100px;
           height: 100px;
           border-radius: 50%;
-          background: url('/assets/images/logo.png') no-repeat center center / cover;
+          background: url('/assets/images/logoo.png') no-repeat center center / cover;
           box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
         h1 {
@@ -1588,7 +1588,7 @@ app.get("/download-quiz-history", async (req, res) => {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Bioscope Quiz Report</title>
-        <link rel="icon" href="assets/images/logo.png">
+        <link rel="icon" href="assets/images/logoo.png">
         <style>
           * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Arial', sans-serif; }
           body { background-color: #f8f9fa; text-align: center; padding: 20px; color: #333; }
