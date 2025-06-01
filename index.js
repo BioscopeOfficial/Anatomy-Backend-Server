@@ -295,7 +295,7 @@ app.get("/login-success", (req, res) => {
       <body>
         <div id="particles-js"></div>
         <div class="container">
-          <img src="/assets/images/logo.png" alt="App Logo" class="logo" />
+          <img src="/assets/images/logoo.png" alt="App Logo" class="logo" />
           <h1>Check Your Google Mail!</h1>
           <p>An OTP has been sent to your Google account <strong>${email}</strong>.</p>
           <p>Please check your inbox to continue. If you haven't received the email, kindly check your spam folder or try again later.</p>
@@ -650,7 +650,7 @@ app.post("/send-quiz-completion-email", async (req, res) => {
     `,
     attachments: [
       {
-        filename: "logo.png",
+        filename: "logoo.png",
         path: logoPath,
         cid: "appLogo", // Attach logo as an inline image
       },
@@ -863,7 +863,7 @@ app.get("/", (req, res) => {
       <div id="particle-container" class="particle-container"></div>
       <div class="dashboard-container">
         <div class="header">
-          <img src="/assets/images/logo.png" alt="App Logo" />
+          <img src="/assets/images/logoo.png" alt="App Logo" />
           <div>
             <h1>Anatomy Server Dashboard</h1>
             <p>3D Virtually Perfect</p>
@@ -1152,7 +1152,7 @@ app.post('/check-email', async (req, res) => {
         html: emailTemplate,
         attachments: [
           {
-            filename: 'logo.png',
+            filename: 'logoo.png',
             path: path.resolve(__dirname, 'assets/images/logo.png'),
             cid: 'appLogo', // Same as the "cid" in the <img> tag
           },
@@ -1622,7 +1622,7 @@ app.get("/download-quiz-history", async (req, res) => {
       </head>
       <body>
         <div class="container">
-          <img src="assets/images/logo.png" class="logo" alt="Bioscope Logo">
+          <img src="assets/images/logoo.png" class="logo" alt="Bioscope Logo">
           <h1>📜 Bioscope - Quiz History</h1>
           <p>🌐 <a href="https://www.anatomy.com/" target="_blank" style="color: #ff6b6b; text-decoration: none;">Visit Our Website</a></p>
           <p>📧 User Email: <strong>${email}</strong></p>
